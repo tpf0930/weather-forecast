@@ -1,3 +1,47 @@
-<h1>
-  {{title}}
-</h1>
+<div class="container">
+  <div>
+    <h2>This is {{name}}'s sample project</h2>
+  </div>
+  <div>
+    <h3>{{city?.name}}: 5 days weather forecast</h3>
+  </div>
+  <form>
+    <div class="row form-group">
+      <div class="col-md-5">
+        <label>City: </label>
+        <input [(ngModel)]="cityname" name="cityname" placeholder="Please Input City Name">
+        <button type="button" (click)="get5daysWeather(cityname)" [disabled]="!cityname">Search</button>
+      </div>
+      <div class="col-md-3">
+
+        <label class="radio-inline"><input type="radio" [(ngModel)]="tempFormat" name="Celsius" value="Celsius"
+                                           checked>Celsius</label>
+        <label class="radio-inline"><input type="radio" [(ngModel)]="tempFormat" name="Fahrenheit"
+                                           value="Fahrenheit">Fahrenheit</label>
+      </div>
+    </div>
+  </form>
+
+  <div style="color:red" *ngIf="invalidCity">Cannot find the city</div>
+
+  <div id="daily_list" class="weather-graphic__table col-md-8">
+    <table class="table daily-list">
+      <tbody>
+      <tr class="daily-list__today" *ngFor="let item of list; let i=index">
+        <td>{{item.dt*1000 | date:short}} <img
+                src="http://openweathermap.org/img/w/{{item.weather[0].icon}}.png">
+          <div *ngIf="i==0" class="daily-list__today-label">Today</div>
+        </td>
+        <td><span class="label label-warning" *ngIf="tempFormat=='Celsius'"> {{item.temp_max_day_C}} °C </span>&nbsp;
+          <span class="label label-default" *ngIf="tempFormat=='Celsius'"> {{item.temp_min_day_C}} °C</span>
+          <span class="label label-warning"
+                *ngIf="tempFormat=='Fahrenheit'"> {{item.temp_max_day_F}} °F </span>&nbsp;
+          <span class="label label-default"
+                *ngIf="tempFormat=='Fahrenheit'"> {{item.temp_min_day_F}} °F</span>
+          &nbsp;&nbsp;<i> {{item.weather[0].description}} </i>
+          <p> {{item.wind.speed}} m/s <br>clouds: {{item.clouds.all}} %, {{item.main.pressure}} hpa</p></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
